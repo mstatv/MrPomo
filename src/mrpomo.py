@@ -45,10 +45,10 @@ class Timer(ttk.Frame):
         # button container for start/stop/reset
         container_buttons = ttk.Frame(self, padding=10)  # holds buttons
         container_buttons.grid(row=2, column=0, sticky="EW")
-        container_buttons.columnconfigure((0, 1), weight=1)
+        container_buttons.columnconfigure((0, 1, 2), weight=1)
 
         # start button
-        self.button_start = ttk.Button(container_buttons, text="Start", command=self.t_start)
+        self.button_start = ttk.Button(container_buttons, text="Start", command=self.t_start, cursor="tcross")
         self.button_start.grid(row=0, column=0, sticky="EW")
 
         # stop button
@@ -57,15 +57,12 @@ class Timer(ttk.Frame):
             text="Stop",
             state="disabled",
             command=self.t_stop,
-            cursor="hand2"
+            cursor="pencil"
         )
         self.button_stop.grid(row=0, column=1, sticky="EW", padx=5)
 
         # reset button
-        self.button_reset = ttk.Button()
-
-        # calling next function
-        self.countdown()
+        self.button_reset = ttk.Button(container_buttons, text="Reset", command=self.t_reset, cursor="pencil")
 
     # t_start function for use with start button
     def t_start(self):
@@ -85,6 +82,12 @@ class Timer(ttk.Frame):
             self.term_after(self._countdown_counter)
             self._countdown_counter = None
 
+    # t_reset function for use with reset button
+    def t_reset(self):
+        self.t_stop()
+        self.time_actual.set("50:00")  # reset starting time
+        self.mrpomo_sched = deque(self.mrpomo_sequ)  # reset sequence
+
     # countdown of timer
     def countdown(self):
         # local variable of time actual
@@ -94,8 +97,6 @@ class Timer(ttk.Frame):
         if self.mrpomo_running and time_actual != "00:00":
             # parsing minutes from seconds -> creating two variables
             mins, secs = time_actual.split(":")
-
-            # TODO: USE divmod(i, j) function to simplify below if/else ?
 
             if int(secs) > 0:  # logic to countdown seconds
                 mins = int(mins)
@@ -145,6 +146,8 @@ class MrPomo(tk.Tk):
         frame_mrpomo = Timer(container)
         frame_mrpomo.grid(row=0, column=0, sticky="NEWS")
 
+
+# TODO: SEPARATE PROGRAM INTO MULTIPLE FILES?
 
 ##############
 # test block #
