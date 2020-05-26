@@ -7,8 +7,12 @@ import tkinter as tk
 
 # params class
 class Params(ttk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, show_mrpomo):
         super().__init__(parent)
+
+        # appearance configure
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(2, weight=1)
 
         # params container
         params_container = ttk.Frame(self, padding="30 15 30 15")
@@ -78,3 +82,12 @@ class Params(ttk.Frame):
         for child in params_container.winfo_children():
             child.grid_configure(padx=7, pady=7)
 
+        # mrpomo timer button
+        # sending user to timer screen/frame
+        button_mrpomo = ttk.Button(
+            self,
+            text="MrPomo",
+            command=show_mrpomo,
+            cursor="tcross"
+        )
+        button_mrpomo.grid(row=0, column=1, sticky="E", padx=7, pady=(7, 0))

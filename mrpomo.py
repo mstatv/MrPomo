@@ -40,13 +40,30 @@ class MrPomo(tk.Tk):
         container.grid()
         container.columnconfigure(0, weight=1)
 
+        # dictionary creation for src frames
+        self.src_frames = dict()
+
         # frame creation, using instance of Timer class
-        frame_mrpomo = Timer(container, self)
+        frame_mrpomo = Timer(container, self, lambda: self.show_frame(Params))
         frame_mrpomo.grid(row=0, column=0, sticky="NEWS")
-        
+
         # frame creation, using Params
-        frame_params = Params(container, self)
+        frame_params = Params(container, self, lambda: self.show_frame(MrPomo))
         frame_params.grid(row=0, column=0, sticky="NEWS")
+
+        # adding to src_frames
+        self.src_frames[MrPomo] = frame_mrpomo
+        self.src_frames[Params] = frame_params
+
+        self.show_frame(MrPomo)
+
+    # show frame function
+    def show_frame(self, container):
+        frame = self.src_frames[container]
+        frame.tkraise()
+
+
+
 
 ##############
 # test block #

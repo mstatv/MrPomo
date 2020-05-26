@@ -9,7 +9,7 @@ import tkinter.ttk as ttk
 # timer class, ttk.Frame is inherited
 class Timer(ttk.Frame):
     # init function
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, show_params):
         # make 'self' into ttk.Frame
         super().__init__(parent)
 
@@ -27,9 +27,19 @@ class Timer(ttk.Frame):
         mrpomo_label = ttk.Label(self, textvariable=self.mrpomo_current_session)  # creating label
         mrpomo_label.grid(row=0, column=0, sticky="W", padx=(10, 0), pady=(10, 0))  # placing label on grid
 
+        # mrpomo params button
+        # sending user to params screen/frames
+        button_params = ttk.Button(
+            self,
+            text="Parameters",
+            command=show_params,
+            cursor="tcross"
+        )
+        button_params.grid(row=0, column=1, sticky="E", padx=7, pady=(7, 0))
+
         # inner frame for MrPomo timer -> fixed height here of '100'
         frame_timer = ttk.Frame(self, height="100")
-        frame_timer.grid(pady=(10, 0), sticky="NEWS")
+        frame_timer.grid(row=1, column=0, columnspan=2, pady=(10, 0), sticky="NSEW")
 
         # label creation
         t_counter = ttk.Label(frame_timer, textvariable=self.time_actual)
@@ -37,7 +47,7 @@ class Timer(ttk.Frame):
 
         # button container for start/stop/reset
         container_buttons = ttk.Frame(self, padding=10)  # holds buttons
-        container_buttons.grid(row=2, column=0, sticky="EW")
+        container_buttons.grid(row=2, column=0, columnspan=2, sticky="EW")
         container_buttons.columnconfigure((0, 1, 2), weight=1)
 
         # start button
