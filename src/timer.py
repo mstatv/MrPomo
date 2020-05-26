@@ -1,47 +1,9 @@
-from collections import deque
-import tkinter as tk
-import tkinter.ttk as ttk
-
 """
 # Created by mstatv
 """
-'''
-This file is to contain all elements related 
-to the function of MrPomo's timer
-the idea is to create a desktop productivity timer app
-'''
-
-
-# class for MrPomo timer inheriting from tkinter.Tk
-class MrPomo(tk.Tk):
-    # init function
-    def __init__(self, *args, **kwargs):
-        # making self = to tkinter object
-        super().__init__(*args, **kwargs)
-
-        self.title("MrPomo")
-        self.columnconfigure(0, weight=1)  # content column, will always be towards top of window
-        self.rowconfigure(1, weight=1)
-
-        # values for controller
-        self.mrpomo = tk.StringVar(value=50)
-        self.stretch = tk.StringVar(value=10)
-        self.sbreak = tk.StringVar(value=20)
-
-        # order of MrPomo sequence: work session, stretch, work session, stretch, work session, break
-        # using conventional pomodoro technique --> though intervals will be longer
-        # work sessions = 50 min; stretch = 10 min; break = 20 min
-        self.mrpomo_sequ = ["MrPomo", "Stretch", "MrPomo", "Strech", "MrPomo", "Break"]
-        self.mrpomo_sched = deque(self.mrpomo_sequ)
-
-        # container frame
-        container = ttk.Frame(self)
-        container.grid()
-        container.columnconfigure(0, weight=1)
-
-        # frame creation, using instance of Timer class
-        frame_mrpomo = Timer(container, self)
-        frame_mrpomo.grid(row=0, column=0, sticky="NEWS")
+from collections import deque
+import tkinter as tk
+import tkinter.ttk as ttk
 
 
 # timer class, ttk.Frame is inherited
@@ -88,12 +50,13 @@ class Timer(ttk.Frame):
             text="Stop",
             state="disabled",
             command=self.t_stop,
-            cursor="pencil"
+            cursor="tcross"
         )
         self.button_stop.grid(row=0, column=1, sticky="EW", padx=5)
 
         # reset button
-        self.button_reset = ttk.Button(container_buttons, text="Reset", command=self.t_reset, cursor="pencil")
+        self.button_reset = ttk.Button(container_buttons, text="Reset", command=self.t_reset, cursor="tcross")
+        self.button_reset.grid(row=0, column=3, sticky="EW", padx=5)
 
     # t_start function for use with start button
     def t_start(self):
@@ -169,10 +132,4 @@ class Timer(ttk.Frame):
             self._countdown_counter = self.after(1000, self.countdown)  # setting counter to self.after value
 
 
-# TODO: SEPARATE PROGRAM INTO MULTIPLE FILES?
 
-##############
-# test block #
-##############
-test = MrPomo()
-test.mainloop()
