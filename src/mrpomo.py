@@ -12,22 +12,53 @@ the idea is to create a desktop productivity timer app
 '''
 
 
-# timer class, ttk.Frame is inherited
-class Timer(ttk.Frame):
+# class for MrPomo timer inheriting from tkinter.Tk
+class MrPomo(tk.Tk):
     # init function
-    def __init__(self, parent):
-        # make 'self' into ttk.Frame
-        super().__init__(parent)
+    def __init__(self, *args, **kwargs):
+        # making self = to tkinter object
+        super().__init__(*args, **kwargs)
 
-        self.time_actual = tk.StringVar(value="00:05")  # creating time actual variable
+        self.title("MrPomo")
+        self.columnconfigure(0, weight=1)  # content column, will always be towards top of window
+        self.rowconfigure(1, weight=1)
+
+        # values for controller
+        self.mrpomo = tk.StringVar(value=50)
+        self.stretch = tk.StringVar(value=10)
+        self.sbreak = tk.StringVar(value=20)
 
         # order of MrPomo sequence: work session, stretch, work session, stretch, work session, break
         # using conventional pomodoro technique --> though intervals will be longer
         # work sessions = 50 min; stretch = 10 min; break = 20 min
         self.mrpomo_sequ = ["MrPomo", "Stretch", "MrPomo", "Strech", "MrPomo", "Break"]
         self.mrpomo_sched = deque(self.mrpomo_sequ)
-        self.mrpomo_current_session = tk.StringVar(value=self.mrpomo_sched[0])  # displaying current session title
-        self.mrpomo_running = True  # boolean marker for run status
+
+        # container frame
+        container = ttk.Frame(self)
+        container.grid()
+        container.columnconfigure(0, weight=1)
+
+        # frame creation, using instance of Timer class
+        frame_mrpomo = Timer(container, self)
+        frame_mrpomo.grid(row=0, column=0, sticky="NEWS")
+
+
+# timer class, ttk.Frame is inherited
+class Timer(ttk.Frame):
+    # init function
+    def __init__(self, parent, controller):
+        # make 'self' into ttk.Frame
+        super().__init__(parent)
+
+        # init controller
+        self.controller = controller
+        time_mrpomo = int(controller.mrpomo.get())
+
+        # format time actual
+        self.time_actual = tk.StringVar(value=f"{time_mrpomo:02d}:05")  # creating time actual variable
+        self.mrpomo_current_session = tk.StringVar(value=controller.mrpomo_sched[0])  # displaying current session title
+        self.mrpomo_running = False  # boolean marker for run status
 
         self._countdown_counter = None  # private counter
 
@@ -79,14 +110,18 @@ class Timer(ttk.Frame):
 
         # if _countdown_counter exists
         if self._countdown_counter:
-            self.term_after(self._countdown_counter)
+            self.after_cancel(self._countdown_counter)
             self._countdown_counter = None
 
     # t_reset function for use with reset button
     def t_reset(self):
         self.t_stop()
-        self.time_actual.set("50:00")  # reset starting time
-        self.mrpomo_sched = deque(self.mrpomo_sequ)  # reset sequence
+
+        # get current time
+        time_mrpomo = int(self.controller.mrpomo.get())
+        self.time_actual.set(f"{time_mrpomo:02d}:00")  # reset starting time
+        self.controller.mrpomo_sched = deque(self.controller.mrpomo_sequ)  # reset sequence
+        self.mrpomo_current_session.set(self.controller.mrpomo_sched[0])
 
     # countdown of timer
     def countdown(self):
@@ -111,40 +146,27 @@ class Timer(ttk.Frame):
 
         elif self.mrpomo_running and time_actual == "00:00":
 
-            self.mrpomo_sched.rotate(-1)  # first value moved to end
-            next_session = self.mrpomo_sched[0]  # move to next session from schedule
+            self.controller.mrpomo_sched.rotate(-1)  # first value moved to end
+            next_session = self.controller.mrpomo_sched[0]  # move to next session from schedule
             self.mrpomo_current_session.set(next_session)  # change label of timer session
 
             # implementing logic for schedule set in Timer class -> __init__ function
             if next_session == "MrPomo":  # work session
-                self.time_actual.set("50:00")
+
+                time_mrpomo = int(self.controller.mrpomo.get())
+                self.time_actual.set(f"{time_mrpomo:02d}:00")
+
             elif next_session == "Stretch":  # stretch
-                self.time_actual.set("10:00")
+
+                time_stretch = int(self.controller.stretch.get())
+                self.time_actual.set(f"{time_stretch:02d}:00")
+
             elif next_session == "Break":  # break
-                self.time_actual.set("20:00")
+
+                time_break = int(self.controller.sbreak.get())
+                self.time_actual.set(f"{time_break:02d}:00")
 
             self._countdown_counter = self.after(1000, self.countdown)  # setting counter to self.after value
-
-
-# class for MrPomo timer inheriting from tkinter.Tk
-class MrPomo(tk.Tk):
-    # init function
-    def __init__(self, *args, **kwargs):
-        # making self = to tkinter object
-        super().__init__(*args, **kwargs)
-
-        self.title("MrPomo")
-        self.columnconfigure(0, weight=1)  # content column, will always be towards top of window
-        self.rowconfigure(1, weight=1)
-
-        # container frame
-        container = ttk.Frame(self)
-        container.grid()
-        container.columnconfigure(0, weight=1)
-
-        # frame creation, using instance of Timer class
-        frame_mrpomo = Timer(container)
-        frame_mrpomo.grid(row=0, column=0, sticky="NEWS")
 
 
 # TODO: SEPARATE PROGRAM INTO MULTIPLE FILES?
