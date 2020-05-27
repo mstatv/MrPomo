@@ -19,13 +19,13 @@ MrPomo is a Productivity Timer desktop application.
 ## To Run
 1. Download "build" folder to desktop
 2. Set CD to MrPomo
-'''sh
-cd desktop/build/MrPomo
-'''
+```sh
+...% cd desktop/build/MrPomo
+```
 3. Run Python file
-'''sh
-python mrpomo.py
-'''
+```sh
+...% python mrpomo.py
+```
 
 ## Built With
 * [Python](https://www.python.org/)
