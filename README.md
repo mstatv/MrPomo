@@ -7,6 +7,7 @@ MrPomo is a Productivity Timer desktop application.
 * Users will be able to customize intervals of Pomodoro time intervals
 <img src="images/mrpomo_params.png"/>
 * Users will be able to start and stop timer as needed, as well as, rest the timer
+
 ### Stretch Screen
 
 <img src="images/stretch_screen.png"/>
