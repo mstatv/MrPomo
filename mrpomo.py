@@ -7,10 +7,16 @@ from src import Timer, Params
 # Created by mstatv
 """
 '''
-This file is to contain all elements related 
-to the function of MrPomo's timer
+MAIN MrPomo File
 the idea is to create a desktop productivity timer app
 '''
+
+# color constants, to color app
+PRIMARY_CLR = "#26c6da"
+SECONDARY_CLR = "#78909c"
+BG_LIGHT_CLR = "#a7c0cd"
+TXT_LIGHT_CLR = "#6ff9ff"
+TXT_DARK_CLR = "#0095a8"
 
 
 # class for MrPomo timer inheriting from tkinter.Tk
@@ -19,6 +25,21 @@ class MrPomo(tk.Tk):
     def __init__(self, *args, **kwargs):
         # making self = to tkinter object
         super().__init__(*args, **kwargs)
+
+        # style of app
+        mrstyle = ttk.Style(self)
+        mrstyle.theme_use("clam")
+
+        mrstyle.configure("Timer.TFrame", background=BG_LIGHT_CLR)
+        mrstyle.configure("Background.TFrame", background=PRIMARY_CLR)
+        mrstyle.configure("TimerText.TLabel", background=BG_LIGHT_CLR, foreground=TXT_DARK_CLR, font="Sans 40")
+        mrstyle.configure("LightText.TLabel", background=PRIMARY_CLR, foreground=TXT_LIGHT_CLR)
+
+        mrstyle.configure("MrPomoButton.TButton", background=SECONDARY_CLR, foreground=TXT_LIGHT_CLR)
+        mrstyle.map("MrPomoButton.TButton", background=[("active", PRIMARY_CLR), ("disabled", TXT_LIGHT_CLR)])
+
+        # set self property for styling
+        self["background"] = PRIMARY_CLR
 
         self.title("MrPomo")
         self.columnconfigure(0, weight=1)  # content column, will always be towards top of window
@@ -61,8 +82,6 @@ class MrPomo(tk.Tk):
     def show_frame(self, container):
         frame = self.src_frames[container]
         frame.tkraise()
-
-
 
 
 ##############

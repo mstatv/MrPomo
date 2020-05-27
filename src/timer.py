@@ -13,6 +13,9 @@ class Timer(ttk.Frame):
         # make 'self' into ttk.Frame
         super().__init__(parent)
 
+        # style
+        self["style"] = "Background.TFrame"
+
         # init controller
         self.controller = controller
         time_mrpomo = int(controller.mrpomo.get())
@@ -24,7 +27,8 @@ class Timer(ttk.Frame):
 
         self._countdown_counter = None  # private counter
 
-        mrpomo_label = ttk.Label(self, textvariable=self.mrpomo_current_session)  # creating label
+        # creating label
+        mrpomo_label = ttk.Label(self, textvariable=self.mrpomo_current_session, style="LightText.TLabel")
         mrpomo_label.grid(row=0, column=0, sticky="W", padx=(10, 0), pady=(10, 0))  # placing label on grid
 
         # mrpomo params button
@@ -33,25 +37,32 @@ class Timer(ttk.Frame):
             self,
             text="Parameters",
             command=show_params,
+            style="MrPomoButton.TButton",
             cursor="tcross"
         )
         button_params.grid(row=0, column=1, sticky="E", padx=7, pady=(7, 0))
 
         # inner frame for MrPomo timer -> fixed height here of '100'
-        frame_timer = ttk.Frame(self, height="100")
+        frame_timer = ttk.Frame(self, height="100", style="Timer.TFrame")
         frame_timer.grid(row=1, column=0, columnspan=2, pady=(10, 0), sticky="NSEW")
 
         # label creation
-        t_counter = ttk.Label(frame_timer, textvariable=self.time_actual)
+        t_counter = ttk.Label(frame_timer, textvariable=self.time_actual, style="TimerText.TLabel")
         t_counter.place(relx=0.5, rely=0.5, anchor="center")  # halfway through frame, anchored at center
 
         # button container for start/stop/reset
-        container_buttons = ttk.Frame(self, padding=10)  # holds buttons
+        container_buttons = ttk.Frame(self, padding=10, style="Background.TFrame")  # holds buttons
         container_buttons.grid(row=2, column=0, columnspan=2, sticky="EW")
         container_buttons.columnconfigure((0, 1, 2), weight=1)
 
         # start button
-        self.button_start = ttk.Button(container_buttons, text="Start", command=self.t_start, cursor="tcross")
+        self.button_start = ttk.Button(
+            container_buttons,
+            text="Start",
+            command=self.t_start,
+            style="MrPomoButton.TButton",
+            cursor="tcross"
+        )
         self.button_start.grid(row=0, column=0, sticky="EW")
 
         # stop button
@@ -60,12 +71,18 @@ class Timer(ttk.Frame):
             text="Stop",
             state="disabled",
             command=self.t_stop,
+            style="MrPomoButton.TButton",
             cursor="tcross"
         )
         self.button_stop.grid(row=0, column=1, sticky="EW", padx=5)
 
         # reset button
-        self.button_reset = ttk.Button(container_buttons, text="Reset", command=self.t_reset, cursor="tcross")
+        self.button_reset = ttk.Button(
+            container_buttons,
+            text="Reset",
+            command=self.t_reset,
+            style="MrPomoButton.TButton",
+            cursor="tcross")
         self.button_reset.grid(row=0, column=3, sticky="EW", padx=5)
 
     # t_start function for use with start button
