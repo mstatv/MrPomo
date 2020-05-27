@@ -1,7 +1,7 @@
 # MrPomo
 Personal Project - Productivity Timer App for Desktop
 -------------------------------
-### *Build In Process* (will update readme file as progress continues)
+<img src="images/traffic_simulation.gif"/>
 -------------------------------
 MrPomo is a Productivity Timer desktop application.
 * Users will be able to customize intervals of Pomodoro time intervals
